@@ -2,16 +2,35 @@
 ## So unless the invertible square matrix has changed, 
 ## its inverse is retrieved from cache after the initial calculation
 
+## usage example
+## > m <- matrix(c(2,3,2,2), 2,2)
+## > x <- makeCacheMatrix(m)
+## > cacheSolve(x)
+##  [,1] [,2]
+## [1,] -1.0    1
+## [2,]  1.5   -1
+## > cacheSolve(x)
+## Getting cached data
+## [,1] [,2]
+## [1,] -1.0    1
+## [2,]  1.5   -1
+
+
 ## Returns a CacheMatrix object with several nested functions
 ## for any matrix as an input
 ## in a list to get original matrix, save the calculated inverse and
 ## finally get the cached inverse (NULL if not set atleast once)
+## use set to reassign a new matrix and restart the flow
 makeCacheMatrix <- function(x = matrix()) {
     inv <- NULL
+    set <- function(y = matrix()) {
+        x <<- y
+        inv <<- NULL
+    }
     get <- function() x
     getinverse <- function() inv
     setinverse <- function(inverse) inv <<- inverse
-    list(get = get, getinverse = getinverse, 
+    list(set = set, get = get, getinverse = getinverse, 
          setinverse = setinverse)
 }
 
